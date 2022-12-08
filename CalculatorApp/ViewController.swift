@@ -17,6 +17,7 @@ class ViewController: UIViewController {
     var thirdNumber = 0.00
     var answer = 0.00
     var selectedOperation: Operation?
+    var equalButtonPressed = false
     
     var label: UILabel = {
         let label = UILabel()
@@ -147,7 +148,7 @@ class ViewController: UIViewController {
         
         guard let labelText = label.text else {return}
         
-        if answer == 0.00 {
+        if equalButtonPressed == false {
             if labelText == "0" {
                 label.text = title
             }
@@ -166,6 +167,7 @@ class ViewController: UIViewController {
         firstNumber = 0
         thirdNumber = 0
         answer = 0
+        equalButtonPressed = false
     }
     
     @objc func decimalButtonPressed(_ sender: UIButton) {
@@ -233,39 +235,45 @@ class ViewController: UIViewController {
                     label.text = "\(answer)"
                     thirdNumber = answer
                 }
-                
+                equalButtonPressed = true
+                print(firstNumber, secondNumber)
             }
         }
         else if tag == 2 {
             selectedOperation = Operation.add
-            if answer != 0.00 {
+            if equalButtonPressed == true {
                 label.text = "0"
-                firstNumber = thirdNumber
                 answer = 0.00
+                firstNumber = thirdNumber
+                equalButtonPressed = false
+                
             }
         }
         else if tag == 3 {
             selectedOperation = Operation.subtract
-            if answer != 0.00 {
+            if equalButtonPressed == true {
                 label.text = "0"
-                firstNumber = thirdNumber
                 answer = 0.00
+                firstNumber = thirdNumber
+                equalButtonPressed = false
             }
         }
         else if tag == 4 {
             selectedOperation = Operation.multiply
-            if answer != 0.00 {
+            if equalButtonPressed == true {
                 label.text = "0"
-                firstNumber = thirdNumber
                 answer = 0.00
+                firstNumber = thirdNumber
+                equalButtonPressed = false
             }
         }
         else if tag == 5 {
             selectedOperation = Operation.divide
-            if answer != 0.00 {
+            if equalButtonPressed == true {
                 label.text = "0"
-                firstNumber = thirdNumber
                 answer = 0.00
+                firstNumber = thirdNumber
+                equalButtonPressed = false
             }
         }
     }
