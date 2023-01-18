@@ -1,10 +1,3 @@
-//
-//  ViewController.swift
-//  CalculatorApp
-//
-//  Created by Studio.C on 11/27/22.
-//
-
 import UIKit
 
 class ViewController: UIViewController {
@@ -14,8 +7,10 @@ class ViewController: UIViewController {
     }
     
     var firstNumber = 0.00
+    var thirdNumber = 0.00
     var answer = 0.00
     var selectedOperation: Operation?
+    var equalButtonPressed = false
     
     var label: UILabel = {
         let label = UILabel()
@@ -142,15 +137,19 @@ class ViewController: UIViewController {
     
     @objc func buttonPressed(_ sender: UIButton) {
      
-        if let text = sender.currentTitle {
-            if label.text == "0" || answer != 0.00 {
-                label.text = text
+        guard let title = sender.currentTitle else {print("Trouble with sender"); return}
+        
+        guard let labelText = label.text else {return}
+        
+        if equalButtonPressed == false {
+            if labelText == "0" {
+                label.text = title
             }
-            else if label.text!.count < 9 {
-                label.text!.append(text)
+            else if labelText.count < 9 {
+                label.text?.append(title)
             }
         }
-        
+     
     }
     
     @objc func clearButtonPressed(_ sender: UIButton) {
@@ -159,12 +158,16 @@ class ViewController: UIViewController {
         }
         selectedOperation = nil
         firstNumber = 0
+        thirdNumber = 0
         answer = 0
+        equalButtonPressed = false
     }
     
     @objc func decimalButtonPressed(_ sender: UIButton) {
-        if label.text!.contains(".") == false {
-            label.text!.append(".")
+        if answer == 0.00 {
+            if label.text!.contains(".") == false {
+                label.text!.append(".")
+            }
         }
     }
     
@@ -178,14 +181,14 @@ class ViewController: UIViewController {
     }
     
     @objc func percentButtonPressed(_ sender: UIButton) {
-        if let number = label.text {
-            if let finalNumber = Double(number) {
-                let finalAnswer = finalNumber/100
-                label.text = "\(finalAnswer)"
+        if answer == 0.00 {
+            if let number = label.text {
+                if let finalNumber = Double(number) {
+                    let finalAnswer = finalNumber/100
+                    label.text = "\(finalAnswer)"
+                }
             }
         }
-
-
     }
     
     @objc func operationPressed(_ sender: UIButton) {
@@ -201,6 +204,7 @@ class ViewController: UIViewController {
         if tag == 1 {
             if let operation = selectedOperation {
                 var secondNumber = 0.00
+                
                 if let text = label.text {
                     if let number = Double(text) {
                         secondNumber = number
@@ -210,31 +214,60 @@ class ViewController: UIViewController {
                 case .add:
                     answer = firstNumber + secondNumber
                     label.text = "\(answer)"
+                    thirdNumber = answer
                 case .subtract:
                     answer = firstNumber - secondNumber
                     label.text = "\(answer)"
+                    thirdNumber = answer
                 case .multiply:
                     answer = firstNumber * secondNumber
                     label.text = "\(answer)"
+                    thirdNumber = answer
                 case .divide:
                     answer = firstNumber / secondNumber
                     label.text = "\(answer)"
+                    thirdNumber = answer
                 }
-                
+                equalButtonPressed = true
                 print(firstNumber, secondNumber)
             }
         }
         else if tag == 2 {
             selectedOperation = Operation.add
+            if equalButtonPressed == true {
+                label.text = "0"
+                answer = 0.00
+                firstNumber = thirdNumber
+                equalButtonPressed = false
+                
+            }
         }
         else if tag == 3 {
             selectedOperation = Operation.subtract
+            if equalButtonPressed == true {
+                label.text = "0"
+                answer = 0.00
+                firstNumber = thirdNumber
+                equalButtonPressed = false
+            }
         }
         else if tag == 4 {
             selectedOperation = Operation.multiply
+            if equalButtonPressed == true {
+                label.text = "0"
+                answer = 0.00
+                firstNumber = thirdNumber
+                equalButtonPressed = false
+            }
         }
         else if tag == 5 {
             selectedOperation = Operation.divide
+            if equalButtonPressed == true {
+                label.text = "0"
+                answer = 0.00
+                firstNumber = thirdNumber
+                equalButtonPressed = false
+            }
         }
     }
 
